@@ -145,6 +145,11 @@ class Actor(nn.Module):
 
         # Call generate
         sequences = self.model.generate(**generate_args)
+        # Debug Code: save input_ids and generation results for debug, in txt format
+        # with open('actor_generate.txt', "a", encoding="utf-8") as f:
+        #     f.write(f"-------------Rank {dist.get_rank()}------------\n"
+        #             f"Input ids [{input_ids.shape}]:\n {input_ids[0].tolist()}\n"
+        #             f"Generated sequences [{sequences.shape}]:\n {sequences[0].tolist()}\n")
 
         # Prepare mask tensor
         eos_token_id = generate_args["eos_token_id"]
@@ -205,9 +210,11 @@ class Actor(nn.Module):
             # explicitly ignore attention_mask for packing_samples
             attention_mask = None
 
+        # flash attention底层可能是一个一个sample算, packing_samples(micro_rollout_batch_size)不会OOM
         output = self.model(sequences, attention_mask=attention_mask, position_ids=position_ids)
         # https://github.com/OpenRLHF/OpenRLHF/pull/634
         output["logits"] = output["logits"].to(torch.float32)
+        # print(f"sequences shape: {sequences.shape}\n logits shape: {output['logits'].shape}")
 
         if num_actions is None:
             assert return_output

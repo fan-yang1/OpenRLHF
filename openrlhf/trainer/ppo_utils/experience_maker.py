@@ -196,6 +196,9 @@ class NaiveExperienceMaker(ABC):
             experience = experience.to_device("cuda")
             reward = reward.to(device="cuda")
             num_actions = experience.info["num_actions"]
+            # print(f"reward: {reward.shape}\n {reward}\n kl: {experience.kl.shape}\n {experience.kl}\n"
+            #       f"kl_ctl.value: {self.kl_ctl.value}\n" 
+            #       f"action_mask: {experience.action_mask.shape}\n {experience.action_mask}\n")
             reward = compute_reward(
                 reward,
                 self.kl_ctl.value,

@@ -149,3 +149,11 @@ core
 *jianh*
 *test_scripts*
 */checkpoint/*
+
+data/kk_train
+data/kk_test
+
+actor_generate.txt
+
+test.py
+test.ipynb

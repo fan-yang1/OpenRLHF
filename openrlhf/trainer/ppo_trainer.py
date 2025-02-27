@@ -352,6 +352,15 @@ class PPOTrainer(ABC):
             num_actions = experience.action_mask.size(1)
             packed_seq_lens = None
             attention_mask = experience.attention_mask
+            # print(f"""
+            #   sequences: {experience.sequences.shape}
+            #   action_log_probs: {experience.action_log_probs.shape}
+            #   values: {experience.values.shape}
+            #   returns: {experience.returns.shape}
+            #   advantages: {experience.advantages.shape}
+            #   attention_mask: {experience.attention_mask.shape}
+            #   action_mask: {experience.action_mask}\n
+            #   """)
 
         # actor loss
         action_log_probs, output = self.actor(

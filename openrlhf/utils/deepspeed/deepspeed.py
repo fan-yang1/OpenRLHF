@@ -78,7 +78,9 @@ class DeepspeedStrategy(ABC):
             self.args.local_rank = int(os.environ["LOCAL_RANK"])
 
         if self.args.local_rank != -1:
+            # print(f"device_count: {torch.cuda.device_count()}, local_rank: {self.args.local_rank}")
             torch.cuda.set_device(self.args.local_rank)
+            # print(f"successfully set device {self.args.local_rank}")
         # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         deepspeed.init_distributed(timeout=timeout)
         self.setup_ring_attn()
